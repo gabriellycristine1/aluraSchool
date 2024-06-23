@@ -2,7 +2,9 @@ import json
 import csv
 
 class Data:
-     
+    """
+    class responsible for extracting, transforming, and load the data.
+    """
     def __init__(self, data):
           self.data = data
           self.name_columns = self.__get_columns()
@@ -10,6 +12,11 @@ class Data:
     
 
     def __read_json(path):
+        """
+        JSON format file reader
+        params:
+        path: path where the file is stored
+        """
         dados_json = []
         with open(path, 'r') as file_json:
             dados_json = json.load(file_json)
@@ -18,6 +25,11 @@ class Data:
 
 
     def __read_csv(path):
+        """
+        CSV format file reader
+        params:
+        path: path where the file is stored
+        """
         dados_csv = []
         with open(path, 'r') as file:
             spamreader = csv.DictReader(file, delimiter=',')
@@ -28,6 +40,12 @@ class Data:
 
     @classmethod
     def read_data(cls, path, type_data):
+        """
+        Method that allows reading two files with different extensions
+        params:
+        path: path where the file is stored
+        type_data: type of date that is going to be worked on
+        """
         data = []
         if type_data == 'csv':
             data =  cls.__read_csv(path)
@@ -38,10 +56,18 @@ class Data:
     
 
     def __get_columns(self):
+        """
+        Return to Data Column
+        """
         return list(self.data[-1].keys())
     
     
     def rename_columns(self, key_mapping):
+        """
+        Renames data columns to standardize
+        params:
+        key_mapping: Align with the team to decide the column names and create a dictionary, where the key is the current name and the value is the name that will be changed
+        """
         new_data = []
 
         for old_dict in self.data:
@@ -55,10 +81,19 @@ class Data:
 
     
     def __size_data(self):
+        """
+        Returns the number of rows in the data
+        """
         return len(self.data)
     
 
     def join_datas(dataA, dataB):
+        """
+        After processing the data, returns a list of the data from both files combined.
+        paramns:
+        dataA: file that is going to be combined
+        dataB: file that is going to be combined
+        """
         combined_list = []
 
         combined_list.extend(dataA.data)
@@ -70,6 +105,9 @@ class Data:
     
 
     def __transform_data_tabel(self):
+        """
+        Transforms data into table format and replaces null data with 'Indisponivel'
+        """
         data_combined_tabel = [self.name_columns]
 
         for row in self.data:
@@ -82,6 +120,11 @@ class Data:
     
         
     def saving_datas(self, path):
+        """
+        Saves the extracted and already processed data
+        paramns:
+        path: path where the data will be saved
+        """
 
         data_combined_tabel = self.__transform_data_tabel()
 
